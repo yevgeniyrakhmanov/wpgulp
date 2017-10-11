@@ -1,0 +1,21 @@
+@import "aafonts";
+@import "aalibs";
+@import "bootstrap";
+@import "aavars";
+
+.bg-thumb {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	display: block;
+	width: 100%;
+	height: 175px;
+}
+.small-text {
+	font-size: 85%;
+}
+.ml-48 {
+	margin-left: 48px;
+}
+
+@import "aamedia"; // Всегда в конце
