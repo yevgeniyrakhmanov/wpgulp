@@ -30,6 +30,7 @@ gulp.task('js', ['common-js'], function() {
 		'wp-content/themes/app/libs/jquery/dist/jquery.min.js',
 		'wp-content/themes/app/libs/popper/popper.min.js',
 		// 'wp-content/themes/app/libs/bootstrap/bootstrap.min.js',
+		'wp-content/themes/app/libs/bootstrap/util.js',
 		'wp-content/themes/app/libs/bootstrap/alert.js',
 		'wp-content/themes/app/libs/bootstrap/button.js',
 		'wp-content/themes/app/libs/bootstrap/carousel.js',
@@ -40,7 +41,6 @@ gulp.task('js', ['common-js'], function() {
 		'wp-content/themes/app/libs/bootstrap/scrollspy.js',
 		'wp-content/themes/app/libs/bootstrap/tab.js',
 		'wp-content/themes/app/libs/bootstrap/tooltip.js',
-		'wp-content/themes/app/libs/bootstrap/util.js',
 		'wp-content/themes/app/js/common.min.js', // Всегда в конце
 		])
 	.pipe(concat('scripts.min.js'))
