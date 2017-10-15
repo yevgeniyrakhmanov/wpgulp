@@ -44,7 +44,7 @@ gulp.task('js', ['common-js'], function() {
 		'wp-content/themes/app/js/common.min.js', // Всегда в конце
 		])
 	.pipe(concat('scripts.min.js'))
-	// .pipe(uglify()) Минимизировать весь js (на выбор)
+	.pipe(uglify()) // Минимизировать js, закомментировать при отладке
 	.pipe(gulp.dest('wp-content/themes/app/js'))
 	.pipe(browserSync.reload({stream: true}));
 });
@@ -61,7 +61,7 @@ gulp.task('scss', function() {
 	.pipe(sass({outputStyle: 'expand'}).on("error", notify.onError()))
 	.pipe(rename({suffix: '.min', prefix : ''}))
 	.pipe(autoprefixer(['last 15 versions']))
-	// .pipe(cleanCSS()) Опционально, закомментировать при отладке
+	.pipe(cleanCSS()) // Минимизировать css, закомментировать при отладке
 	.pipe(gulp.dest('wp-content/themes/app/css'))
 	.pipe(browserSync.reload({stream: true}));
 });
@@ -83,7 +83,8 @@ gulp.task('build', ['removedist', 'imagemin', 'scss', 'js'], function() {
 
 	var buildFiles = gulp.src([
 		'wp-content/themes/app/*.php',
-		'wp-content/themes/app/.htaccess',
+		'wp-content/themes/app/*.css',
+		'wp-content/themes/app/*.png',
 		]).pipe(gulp.dest('wp-content/themes/dist'));
 
 	var buildCss = gulp.src([
