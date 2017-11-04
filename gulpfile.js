@@ -44,7 +44,7 @@ gulp.task('js', ['common-js'], function() {
 		'wp-content/themes/app/js/common.min.js', // Всегда в конце
 		])
 	.pipe(concat('scripts.min.js'))
-	.pipe(uglify()) // Минимизировать js, закомментировать при отладке
+	// .pipe(uglify()) Минимизировать весь js (на выбор)
 	.pipe(gulp.dest('wp-content/themes/app/js'))
 	.pipe(browserSync.reload({stream: true}));
 });
@@ -56,18 +56,21 @@ gulp.task('browser-sync', function() {
 	});
 });
 
-gulp.task('scss', function() {
-	return gulp.src('wp-content/themes/app/scss/**/*.scss')
+gulp.task('sass', function() {
+	return gulp.src([
+		'app/sass/**/*.scss',
+		'app/sass/**/*.sass'
+		])
 	.pipe(sass({outputStyle: 'expand'}).on("error", notify.onError()))
 	.pipe(rename({suffix: '.min', prefix : ''}))
 	.pipe(autoprefixer(['last 15 versions']))
-	.pipe(cleanCSS()) // Минимизировать css, закомментировать при отладке
+	// .pipe(cleanCSS()) Опционально, закомментировать при отладке
 	.pipe(gulp.dest('wp-content/themes/app/css'))
 	.pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('watch', ['scss', 'js', 'browser-sync'], function() {
-	gulp.watch('wp-content/themes/app/scss/**/*.scss', ['scss']);
+gulp.task('watch', ['sass', 'js', 'browser-sync'], function() {
+	gulp.watch(['wp-content/themes/app/scss/**/*.scss', 'wp-content/themes/app/sass/**/*.sass'], ['sass']);
 	gulp.watch(['wp-content/themes/app/libs/**/*.js', 'wp-content/themes/app/js/common.js'], ['js']);
 	gulp.watch('wp-content/themes/app/*.php', browserSync.reload);
 	gulp.watch('./*.php', browserSync.reload);
@@ -79,12 +82,11 @@ gulp.task('imagemin', function() {
 	.pipe(gulp.dest('wp-content/themes/dist/img')); 
 });
 
-gulp.task('build', ['removedist', 'imagemin', 'scss', 'js'], function() {
+gulp.task('build', ['removedist', 'imagemin', 'sass', 'js'], function() {
 
 	var buildFiles = gulp.src([
 		'wp-content/themes/app/*.php',
-		'wp-content/themes/app/*.css',
-		'wp-content/themes/app/*.png',
+		'wp-content/themes/app/.htaccess',
 		]).pipe(gulp.dest('wp-content/themes/dist'));
 
 	var buildCss = gulp.src([
