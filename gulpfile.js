@@ -72,7 +72,7 @@ gulp.task('sass', function() {
 gulp.task('watch', ['sass', 'js', 'browser-sync'], function() {
 	gulp.watch(['wp-content/themes/app/scss/**/*.scss', 'wp-content/themes/app/sass/**/*.sass'], ['sass']);
 	gulp.watch(['wp-content/themes/app/libs/**/*.js', 'wp-content/themes/app/js/common.js'], ['js']);
-	gulp.watch('wp-content/themes/app/*.php', browserSync.reload);
+	gulp.watch('wp-content/themes/app/**/*.php', browserSync.reload);
 	gulp.watch('./*.php', browserSync.reload);
 });
 
