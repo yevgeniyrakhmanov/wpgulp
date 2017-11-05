@@ -1,166 +1,142 @@
-import $ from 'jquery'
-
 /**
  * --------------------------------------------------------------------------
  * Bootstrap (v4.0.0-beta.2): util.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
-
-const Util = (() => {
-
-
+var Util = function () {
   /**
    * ------------------------------------------------------------------------
    * Private TransitionEnd Helpers
    * ------------------------------------------------------------------------
    */
+  var transition = false;
+  var MAX_UID = 1000000;
+  var TransitionEndEvent = {
+    WebkitTransition: 'webkitTransitionEnd',
+    MozTransition: 'transitionend',
+    OTransition: 'oTransitionEnd otransitionend',
+    transition: 'transitionend' // shoutout AngusCroll (https://goo.gl/pxwQGp)
 
-  let transition = false
+  };
 
-  const MAX_UID = 1000000
-
-  const TransitionEndEvent = {
-    WebkitTransition : 'webkitTransitionEnd',
-    MozTransition    : 'transitionend',
-    OTransition      : 'oTransitionEnd otransitionend',
-    transition       : 'transitionend'
-  }
-
-  // shoutout AngusCroll (https://goo.gl/pxwQGp)
   function toType(obj) {
-    return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+    return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
   }
 
   function getSpecialTransitionEndEvent() {
     return {
       bindType: transition.end,
       delegateType: transition.end,
-      handle(event) {
+      handle: function handle(event) {
         if ($(event.target).is(this)) {
-          return event.handleObj.handler.apply(this, arguments) // eslint-disable-line prefer-rest-params
+          return event.handleObj.handler.apply(this, arguments); // eslint-disable-line prefer-rest-params
         }
-        return undefined // eslint-disable-line no-undefined
+
+        return undefined; // eslint-disable-line no-undefined
       }
-    }
+    };
   }
 
   function transitionEndTest() {
     if (window.QUnit) {
-      return false
+      return false;
     }
 
-    const el = document.createElement('bootstrap')
+    var el = document.createElement('bootstrap');
 
-    for (const name in TransitionEndEvent) {
+    for (var name in TransitionEndEvent) {
       if (typeof el.style[name] !== 'undefined') {
         return {
           end: TransitionEndEvent[name]
-        }
+        };
       }
     }
 
-    return false
+    return false;
   }
 
   function transitionEndEmulator(duration) {
-    let called = false
+    var _this = this;
 
-    $(this).one(Util.TRANSITION_END, () => {
-      called = true
-    })
-
-    setTimeout(() => {
+    var called = false;
+    $(this).one(Util.TRANSITION_END, function () {
+      called = true;
+    });
+    setTimeout(function () {
       if (!called) {
-        Util.triggerTransitionEnd(this)
+        Util.triggerTransitionEnd(_this);
       }
-    }, duration)
-
-    return this
+    }, duration);
+    return this;
   }
 
   function setTransitionEndSupport() {
-    transition = transitionEndTest()
-
-    $.fn.emulateTransitionEnd = transitionEndEmulator
+    transition = transitionEndTest();
+    $.fn.emulateTransitionEnd = transitionEndEmulator;
 
     if (Util.supportsTransitionEnd()) {
-      $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent()
+      $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
     }
   }
-
-
   /**
    * --------------------------------------------------------------------------
    * Public Util Api
    * --------------------------------------------------------------------------
    */
 
-  const Util = {
 
+  var Util = {
     TRANSITION_END: 'bsTransitionEnd',
-
-    getUID(prefix) {
+    getUID: function getUID(prefix) {
       do {
         // eslint-disable-next-line no-bitwise
-        prefix += ~~(Math.random() * MAX_UID) // "~~" acts like a faster Math.floor() here
-      } while (document.getElementById(prefix))
-      return prefix
-    },
+        prefix += ~~(Math.random() * MAX_UID); // "~~" acts like a faster Math.floor() here
+      } while (document.getElementById(prefix));
 
-    getSelectorFromElement(element) {
-      let selector = element.getAttribute('data-target')
+      return prefix;
+    },
+    getSelectorFromElement: function getSelectorFromElement(element) {
+      var selector = element.getAttribute('data-target');
+
       if (!selector || selector === '#') {
-        selector = element.getAttribute('href') || ''
+        selector = element.getAttribute('href') || '';
       }
 
       try {
-        const $selector = $(document).find(selector)
-        return $selector.length > 0 ? selector : null
+        var $selector = $(document).find(selector);
+        return $selector.length > 0 ? selector : null;
       } catch (error) {
-        return null
+        return null;
       }
     },
-
-    reflow(element) {
-      return element.offsetHeight
+    reflow: function reflow(element) {
+      return element.offsetHeight;
     },
-
-    triggerTransitionEnd(element) {
-      $(element).trigger(transition.end)
+    triggerTransitionEnd: function triggerTransitionEnd(element) {
+      $(element).trigger(transition.end);
     },
-
-    supportsTransitionEnd() {
-      return Boolean(transition)
+    supportsTransitionEnd: function supportsTransitionEnd() {
+      return Boolean(transition);
     },
-
-    isElement(obj) {
-      return (obj[0] || obj).nodeType
+    isElement: function isElement(obj) {
+      return (obj[0] || obj).nodeType;
     },
-
-    typeCheckConfig(componentName, config, configTypes) {
-      for (const property in configTypes) {
+    typeCheckConfig: function typeCheckConfig(componentName, config, configTypes) {
+      for (var property in configTypes) {
         if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-          const expectedTypes = configTypes[property]
-          const value         = config[property]
-          const valueType     = value && Util.isElement(value) ?
-                                'element' : toType(value)
+          var expectedTypes = configTypes[property];
+          var value = config[property];
+          var valueType = value && Util.isElement(value) ? 'element' : toType(value);
 
           if (!new RegExp(expectedTypes).test(valueType)) {
-            throw new Error(
-              `${componentName.toUpperCase()}: ` +
-              `Option "${property}" provided type "${valueType}" ` +
-              `but expected type "${expectedTypes}".`)
+            throw new Error(componentName.toUpperCase() + ": " + ("Option \"" + property + "\" provided type \"" + valueType + "\" ") + ("but expected type \"" + expectedTypes + "\"."));
           }
         }
       }
     }
-  }
-
-  setTransitionEndSupport()
-
-  return Util
-
-})($)
-
-export default Util
+  };
+  setTransitionEndSupport();
+  return Util;
+}($);
+//# sourceMappingURL=util.js.map
