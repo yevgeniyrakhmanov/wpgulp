@@ -1,11 +1,3 @@
-<?php
-/**
- * Шаблон комментариев
- * Выводит список комментариев и форму добавления
- * @package WordPress
- * @subpackage your-clean-template
- */
-?>
 <div id="comments" class="comments small-text mt-5">
 	<p class="lead page-header">Комментарии <span class="badge badge-secondary"><?php echo get_comments_number(); ?></span></p>
 	<?php if (have_comments()) : // если комменты есть ?>

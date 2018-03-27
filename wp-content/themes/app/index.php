@@ -1,21 +1,14 @@
-<?php
-/**
- * Главная страница
- * @package WordPress
- * @subpackage your-clean-template
- */
-get_header(); ?> 
-<h1 class="text-center mt-3"></h1>
-<section class="align-items-start justify-content-around row">
+<?php get_header(); ?> 
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-	<div class="col-md-6 col-lg-4 mt-3">				
-		<?php get_template_part('loop'); ?>
-	</div>
+<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<a href="<?php the_permalink(); ?>">
+		<img src="<?php echo get_the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+		<?php the_title(); ?>
+		<?php the_excerpt();?>
+	</a>
+</div>
 <?php endwhile;
-else: echo '<h2>Нет записей.</h2>'; endif; ?>
-</section>
-<section>
-	<?php pagination(); ?>
-</section>	 
+else: echo '<h2>No singles.</h2>'; endif; ?>
+<?php pagination(); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
